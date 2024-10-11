@@ -25,18 +25,10 @@ public class Problem {
         initialState = new Node(null,0,null,0,bottles);
     }
 
-    public boolean goalTest(Node currentState) {
+    public boolean goalTest(Node currentState) { //test method
         for (Bottle bottle : currentState.getBottles()) {
             ArrayList<Character> layers = bottle.getLayers();
-            boolean allEmpty = true;
-            for (char layer : layers) {
-                if (layer != 'e') {
-                    allEmpty = false;
-                    break;
-                }
-            }
-            if (!allEmpty) {
-
+            if (!bottle.isEmpty()) {
                 char firstColor = layers.get(0);
                 for (char layer : layers) {
                     if (layer == 'e' || layer != firstColor) {

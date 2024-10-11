@@ -50,7 +50,17 @@ public class Bottle {
 
 
     public boolean isFull() {
-        return layers.size() == capacity;
+        int c=0;
+        ArrayList<Character> layers = this.getLayers();
+        for (char layer : layers) {
+            if (layer != 'e') {
+               c++;
+            }
+        }
+        if(c==capacity){
+            return true;
+        }
+        return false;
     }
 
     public boolean isEmpty() {
@@ -65,8 +75,6 @@ public class Bottle {
     public int getTopLayerAmountSrc(char color) {
         int topLayerCount = 0;
         int i =0;
-
-
         while(i<layers.size()) {
             if (layers.get(i) == 'e') {
                   i++;
@@ -74,19 +82,22 @@ public class Bottle {
             else if(layers.get(i)==color){
                 topLayerCount++;
                 i++;
-
             }
             else
                 return topLayerCount;
-
-
         }
-
         return topLayerCount;
     }
 
     public int getEmptySpaceDest() {
-        return capacity - layers.size();
+
+        int c=0;
+        for (char layer : layers) {
+            if (layer == 'e') {
+                c++;
+            }
+        }
+        return c;
     }
 
     public int getID() {
