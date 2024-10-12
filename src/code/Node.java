@@ -22,9 +22,10 @@ public class Node {
         System.out.print("Level: "+depth+", Action: " + action + ", Path Cost: " + pathCost
         + ", Bottles: ");
         for (Bottle b: bottles){
-            b.printBottle();
+            System.out.print(b.getLayers());
             System.out.print(";");
         }
+        System.out.println("");
     }
 
     public ArrayList<Bottle> getBottles() {

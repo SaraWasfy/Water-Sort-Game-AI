@@ -45,7 +45,7 @@ public class Bottle {
                 return i;
             }
         }
-        return -1;
+        return layers.size(); //if the bottle is completely empty
     }
 
 
