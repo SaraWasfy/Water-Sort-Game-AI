@@ -23,6 +23,30 @@ public class Bottle {
             else
                 System.out.print(c);
     }
+    public boolean sameColor(){
+        if (!this.isEmpty()){
+            char firstColor = getTopLayer();
+            for (char layer : layers) {
+                if (layer != 'e' && layer != firstColor) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    public boolean isDone(){
+        if (!this.isEmpty() && this.isFull()) {
+            char firstColor = layers.get(0);
+            for (char layer : layers) {
+                if (layer == 'e' || layer != firstColor) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
     public char getTopLayer() {
 
         for (int i = 0; i < layers.size(); i++) {

@@ -1,7 +1,9 @@
 package code;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class WaterSortSearch extends GenericSearch {
 
@@ -30,14 +32,42 @@ public class WaterSortSearch extends GenericSearch {
         }
         return successors;
     }
+    @Override
+    public Node search() {
+        Queue<Node> nodes = new LinkedList<>();
+        nodes.add(problem.getInitialState());
+        while (!nodes.isEmpty()) {
+            Node node = nodes.poll();
+            if (problem.goalTest(node)) {
+                return node;
+            }
+            if(strategy instanceof IDS)
+                ((IDS) strategy).incrementDepthLimit();
+            nodes = strategy.qingFunction(nodes, expand(node));
+
+        }
+        return null;
+    }
     public static void main(String[] args){
         WaterSortProblem test= new WaterSortProblem();
-        WaterSortSearch t =new WaterSortSearch(test,null);
-        test.parseInitialState("5;4;" + "b,b,b,r;" + "r,r,r,r;" + "y,y,y,y;" + "e,e,b,b;" + "e,e,e,e;");
-        Node root = test.getInitialState();
-        List <Node> res= t.expand(root);
-        for (Node n: res) {
-            n.printNode();
-        }
+        BFS bfs = new BFS();
+        WaterSortSearch t =new WaterSortSearch(test,bfs);
+        test.parseInitialState("5;4;" + "b,y,r,b;" + "b,y,r,r;" + "y,r,b,y;" + "e,e,e,e;"+ "e,e,e,e;");
+        Node answer=t.search();
+        answer.printNode();
+        System.out.println(answer.getPlan());
+//        Node root = test.getInitialState();
+//        Queue<Node> nodes= new LinkedList<>();
+//        List<Node> exp=t.expand(root);
+//        nodes= bfs.qingFunction(nodes, exp);
+//        System.out.print("Node to be expanded: ");
+//        Node node =nodes.poll();
+//        node.printNode();
+//        System.out.println("-------------");
+//        exp=t.expand(node);
+//        Queue<Node> res =bfs.qingFunction(nodes,exp);
+//        for (Node n: res) {
+//            n.printNode();
+//        }
     }
 }

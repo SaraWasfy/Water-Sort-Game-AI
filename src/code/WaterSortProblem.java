@@ -29,12 +29,8 @@ public class WaterSortProblem extends Problem {
         for (Bottle bottle : currentState.getBottles()) {
             ArrayList<Character> layers = bottle.getLayers();
             if (!bottle.isEmpty()) {
-                char firstColor = layers.get(0);
-                for (char layer : layers) {
-                    if (layer == 'e' || layer != firstColor) {
-                        return false;
-                    }
-                }
+                if(!bottle.isDone())
+                    return false;
             }
         }
         return true;
@@ -45,17 +41,8 @@ public class WaterSortProblem extends Problem {
         Bottle sourceNew = new Bottle(source.getCapacity(), source.getLayers());
         Bottle destinationNew = new Bottle(source.getCapacity(), destination.getLayers());
         ArrayList<Object> result=new ArrayList<Object>();
-        if (destination.isFull()) {
-            System.out.println("destination is full");
-            result.add(0, source);
-            result.add(1, destination);
-            result.add(2, false);
-            result.add(3,0);
-            return result;
-        }
-
-        if (source.isEmpty()) {
-            System.out.println("source is empty");
+        if (destination.isFull() || source.isDone() || source.isEmpty() ||(source.sameColor()&& destination.isEmpty())) {
+            //System.out.println("destination is full");
             result.add(0, source);
             result.add(1, destination);
             result.add(2, false);

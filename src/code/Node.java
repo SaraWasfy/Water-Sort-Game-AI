@@ -31,7 +31,24 @@ public class Node {
     public ArrayList<Bottle> getBottles() {
         return bottles;
     }
-
+    public String getPlan(){
+        String res = "";
+        String action = this.action;
+        Node cur=this;
+        while (action!=null){
+            if (res.equals(""))
+                res = action + res;
+            else
+                res = action +","+ res;
+            if (this.parent!=null) {
+                cur = cur.parent;
+                action = cur.action;
+            }
+            else
+                break;
+        }
+        return res;
+    }
     public int getPathCost() {
         return pathCost;
     }

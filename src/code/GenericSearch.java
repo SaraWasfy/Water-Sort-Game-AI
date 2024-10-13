@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Queue;
 
 public abstract class GenericSearch {
-    private Problem problem;
-    private Strategy strategy;
+     Problem problem;
+     Strategy strategy;
 
     public GenericSearch(Problem problem, Strategy strategy) {
         this.problem = problem;
@@ -13,7 +13,6 @@ public abstract class GenericSearch {
     }
 
     public Node search() {
-
         Queue<Node> nodes = new LinkedList<>();
         nodes.add(problem.getInitialState());
         while (!nodes.isEmpty()) {
@@ -23,7 +22,6 @@ public abstract class GenericSearch {
             }
             nodes = strategy.qingFunction(nodes, expand(node));
         }
-
         return null;
     }
     public abstract List<Node> expand(Node node);
