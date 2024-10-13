@@ -1,15 +1,15 @@
 package code;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public abstract class GenericSearch {
+    Set<List<Bottle>> visitedStates;
      Problem problem;
      Strategy strategy;
 
     public GenericSearch(Problem problem, Strategy strategy) {
         this.problem = problem;
         this.strategy = strategy;
+        visitedStates =new HashSet<>();
     }
 
     public Node search() {

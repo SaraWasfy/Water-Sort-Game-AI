@@ -15,7 +15,7 @@ public class IDS extends Strategy {
     @Override
     public Queue<Node> qingFunction(Queue<Node> nodes, List<Node> expand) {
         Queue<Node> result = new LinkedList<>();
-
+        incrementDepthLimit();
         for (Node node : expand) {
             if (node.getDepth() <= depthLimit) {
                 result.add(node);

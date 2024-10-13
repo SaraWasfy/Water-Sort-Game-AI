@@ -24,30 +24,33 @@ public class WaterSortSearch extends GenericSearch {
                         ArrayList<Bottle> newBottles = new ArrayList<>(bottles);
                         newBottles.set(i, (Bottle) result.get(0));
                         newBottles.set(j, (Bottle) result.get(1));
-                        Node newNode = new Node("pour_" + i + "_" + j, (int)result.get(3), node, node.getDepth()+1, newBottles);
-                        successors.add(newNode);
+                        if (!this.visitedStates.contains(newBottles)){
+                            Node newNode = new Node("pour_" + i + "_" + j, (int) result.get(3), node, node.getDepth() + 1, newBottles);
+                            successors.add(newNode);
+                            visitedStates.add(newBottles);
+                        }
                     }
                 }
             }
         }
         return successors;
     }
-    @Override
-    public Node search() {
-        Queue<Node> nodes = new LinkedList<>();
-        nodes.add(problem.getInitialState());
-        while (!nodes.isEmpty()) {
-            Node node = nodes.poll();
-            if (problem.goalTest(node)) {
-                return node;
-            }
-            if(strategy instanceof IDS)
-                ((IDS) strategy).incrementDepthLimit();
-            nodes = strategy.qingFunction(nodes, expand(node));
-
-        }
-        return null;
-    }
+//    @Override
+//    public Node search() {
+//        Queue<Node> nodes = new LinkedList<>();
+//        nodes.add(problem.getInitialState());
+//        while (!nodes.isEmpty()) {
+//            Node node = nodes.poll();
+//            if (problem.goalTest(node)) {
+//                return node;
+//            }
+//            if(strategy instanceof IDS)
+//                ((IDS) strategy).incrementDepthLimit();
+//            nodes = strategy.qingFunction(nodes, expand(node));
+//
+//        }
+//        return null;
+//    }
     public static void main(String[] args){
         WaterSortProblem test= new WaterSortProblem();
         BFS bfs = new BFS();

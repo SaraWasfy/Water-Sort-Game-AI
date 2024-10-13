@@ -1,6 +1,7 @@
 package code;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Bottle {
     private static int IDCounter = 0;
@@ -138,6 +139,19 @@ public class Bottle {
 
     public void setLayers(ArrayList<Character> layers) {
         this.layers = layers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bottle bottle = (Bottle) o;
+        return layers.equals(bottle.layers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(capacity, layers);  // Generate hash based on capacity and layers
     }
 
 }
