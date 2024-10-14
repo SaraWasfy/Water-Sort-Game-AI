@@ -9,7 +9,7 @@ public class UCS extends Strategy {
 
     @Override
     public Queue<Node> qingFunction(Queue<Node> nodes, List<Node> expand) {
-        PriorityQueue<Node> result = new PriorityQueue<>(Comparator.comparingInt(Node::getPathCost));
+        PriorityQueue<Node> result = new PriorityQueue<>(Comparator.comparingInt(Node::getTotalPathCost));
 
         result.addAll(nodes);
 

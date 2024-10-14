@@ -1,16 +1,80 @@
 package code;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class WaterSortSearch extends GenericSearch {
+    Set<List<Bottle>> visitedStates;
+    int nodesExpanded = 0;
 
     public WaterSortSearch(Problem problem, Strategy strategy) {
         super(problem, strategy);
+        visitedStates = new HashSet<>();
     }
 
+    public int getNodesExpanded() {
+        return nodesExpanded;
+    }
+
+    public void setNodesExpanded(int nodesExpanded) {
+        this.nodesExpanded = nodesExpanded;
+    }
+
+    public static String solve (String initialState, String strategy, boolean visualize){
+        WaterSortProblem problem = new WaterSortProblem();
+        problem.parseInitialState(initialState);
+        WaterSortSearch waterSortSearch;
+        switch (strategy){
+            case "BF": {
+                BFS bfs = new BFS();
+                waterSortSearch = new WaterSortSearch(problem, bfs);
+                break;}
+            case "DF": {
+                DFS dfs = new DFS();
+                waterSortSearch = new WaterSortSearch(problem, dfs);
+                break;}
+            case "ID": {
+                IDS ids = new IDS();
+                waterSortSearch = new WaterSortSearch(problem, ids);
+                break;}
+            case "UC": {
+                UCS ucs = new UCS();
+                waterSortSearch = new WaterSortSearch(problem, ucs);
+                break;}
+            case "GR1": {
+                GR gr1 = new GR(1);
+                waterSortSearch = new WaterSortSearch(problem, gr1);
+                break;
+            }
+            case "GR2": {
+                GR gr2 = new GR(2);
+                waterSortSearch = new WaterSortSearch(problem, gr2);
+                break;
+            }
+            case "AS1": {
+                AS as1 = new AS(1);
+                waterSortSearch = new WaterSortSearch(problem, as1);
+                break;
+            }
+            default: {
+                AS as2 = new AS(2);
+                waterSortSearch = new WaterSortSearch(problem, as2);
+            }
+        }
+        Node goal = waterSortSearch.search();
+        if (goal != null) {
+            if (visualize) {
+                List<Node> path = goal.getPath();
+                for (Node step : path) {
+                    step.printNode();
+                    System.out.println("Move: " + step.getAction());
+                    System.out.println("Cost so far: " + step.getTotalPathCost());
+                    System.out.println("------------------------");
+                }
+            }
+            return (goal.getPlan() + ";" + goal.getTotalPathCost() + ";" + waterSortSearch.nodesExpanded) ;
+        }
+        return "NOSOLUTION";
+    }
     public List<Node> expand(Node node) {
         List<Node> successors = new ArrayList<>();
 
@@ -26,6 +90,7 @@ public class WaterSortSearch extends GenericSearch {
                         newBottles.set(j, (Bottle) result.get(1));
                         if (!this.visitedStates.contains(newBottles)){
                             Node newNode = new Node("pour_" + i + "_" + j, (int) result.get(3), node, node.getDepth() + 1, newBottles);
+                            this.setNodesExpanded(getNodesExpanded()+1);
                             successors.add(newNode);
                             visitedStates.add(newBottles);
                         }

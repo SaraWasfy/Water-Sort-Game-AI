@@ -1,7 +1,8 @@
 package code;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
+import java.util.List;
 public class Node {
 
     private ArrayList<Bottle>bottles;
@@ -27,7 +28,18 @@ public class Node {
         }
         System.out.println("");
     }
+    public List<Node> getPath() {
+        List<Node> path = new ArrayList<>();
+        Node currentNode = this;
 
+        while (currentNode != null) {
+            path.add(currentNode);
+            currentNode = currentNode.getParent();
+        }
+        Collections.reverse(path);
+
+        return path;
+    }
     public ArrayList<Bottle> getBottles() {
         return bottles;
     }
@@ -51,6 +63,16 @@ public class Node {
     }
     public int getPathCost() {
         return pathCost;
+    }
+
+    public int getTotalPathCost(){
+        int cost = 0;
+        Node cur=this;
+        while (cur!=null){
+            cost += cur.pathCost;
+            cur = cur.parent;
+        }
+        return cost;
     }
 
     public String getAction() {
