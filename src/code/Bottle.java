@@ -18,11 +18,9 @@ public class Bottle {
     }
 
     public void printBottle(){
-        for (char c: layers)
-            if (c!= layers.get(layers.size()-1))
-                System.out.print(c+",");
-            else
-                System.out.print(c);
+        for (int i =0; i<layers.size()-1;i++)
+                System.out.print(layers.get(i)+",");
+        System.out.println(layers.get(layers.size()-1)+";");
     }
     public boolean sameColor(){
         if (!this.isEmpty()){
