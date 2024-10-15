@@ -1,4 +1,6 @@
 package code;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
 import java.util.*;
 
 public abstract class GenericSearch {
@@ -50,6 +52,29 @@ public abstract class GenericSearch {
             }
         }
         return null;
+    }
+    public static void monitorUsage() {
+        OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        Runtime runtime = Runtime.getRuntime();
+
+        // CPU utilization (available only on some platforms)
+        if (osBean instanceof com.sun.management.OperatingSystemMXBean) {
+            double cpuUtilization = ((com.sun.management.OperatingSystemMXBean) osBean).getProcessCpuLoad() * 100;
+            System.out.println("CPU Utilization: " + String.format("%.2f", cpuUtilization) + " %");
+        } else {
+            System.out.println("CPU Utilization data not available on this platform.");
+        }
+
+        // RAM usage
+        long usedMemory = runtime.totalMemory() - runtime.freeMemory();
+        long freeMemory = runtime.freeMemory();
+        long totalMemory = runtime.totalMemory();
+        long maxMemory = runtime.maxMemory();
+
+        System.out.println("Used RAM: " + (usedMemory / (1024 * 1024)) + " MB");
+        System.out.println("Free RAM: " + (freeMemory / (1024 * 1024)) + " MB");
+        System.out.println("Total RAM: " + (totalMemory / (1024 * 1024)) + " MB");
+        System.out.println("Max RAM: " + (maxMemory / (1024 * 1024)) + " MB");
     }
     public abstract List<Node> expand(Node node);
 }
