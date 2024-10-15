@@ -11,7 +11,6 @@ public class WaterSortProblem extends Problem {
 
     public void parseInitialState(String beforeSplit) {
         String[] afterSplit = beforeSplit.split(";");
-        //int numberOfBottles = Integer.parseInt(afterSplit[0]);
         int bottleCapacity = Integer.parseInt(afterSplit[1]);
         ArrayList<Bottle>bottles = new ArrayList<>();
         for (int i = 2; i < afterSplit.length; i++) {
@@ -27,7 +26,6 @@ public class WaterSortProblem extends Problem {
 
     public boolean goalTest(Node currentState) {
         for (Bottle bottle : currentState.getBottles()) {
-            ArrayList<Character> layers = bottle.getLayers();
             if (!bottle.isEmpty()) {
                 if(!bottle.isDone())
                     return false;
@@ -36,13 +34,11 @@ public class WaterSortProblem extends Problem {
         return true;
     }
 
-    //needs to be tested
-    public static ArrayList<Object> pour(Bottle source, Bottle destination) { //pour(i,j)
+    public static ArrayList<Object> pour(Bottle source, Bottle destination) {
         Bottle sourceNew = new Bottle(source.getCapacity(), source.getLayers());
         Bottle destinationNew = new Bottle(source.getCapacity(), destination.getLayers());
         ArrayList<Object> result=new ArrayList<Object>();
         if (destination.isFull() || source.isDone() || source.isEmpty() ||(source.sameColor()&& destination.isEmpty())) {
-            //System.out.println("destination is full");
             result.add(0, source);
             result.add(1, destination);
             result.add(2, false);
@@ -88,22 +84,5 @@ public class WaterSortProblem extends Problem {
         result.add(3,pourAmount);
         return result;
 
-    }
-
-
-    public static void main(String[] args) {
-        WaterSortProblem waterSortProblem = new WaterSortProblem();
-        String init = "5;4;" + "b,b,b,r;" + "r,r,r,r;" + "y,y,y,y;" + "e,e,b,b;" + "e,e,e,e;";
-        waterSortProblem.parseInitialState(init);
-        Node initialState = waterSortProblem.getInitialState();
-        ArrayList<Bottle> bottles = initialState.getBottles();
-        System.out.println("Parsed Bottles:");
-        for (Bottle bottle : bottles) {
-            System.out.println("Bottle ID: " + bottle.getID() + ", Capacity: " + bottle.getCapacity() + ", Layers: " + bottle.getLayers());
-        }
-        ArrayList<Object> res= pour(bottles.get(4),bottles.get(3));
-        System.out.println("Bottle 1:" + ((Bottle)res.get(0)).getLayers() +
-                " Bottle 2:" + ((Bottle)res.get(1)).getLayers() +
-                " Status: " + res.get(2));
     }
 }

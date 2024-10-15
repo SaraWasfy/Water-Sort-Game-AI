@@ -6,13 +6,13 @@ import java.util.*;
 public abstract class GenericSearch {
      Problem problem;
      Strategy strategy;
-    Set<List<Bottle>> visitedStates;
+    Map<List<Bottle>, Integer> visitedStates;
     int nodesExpanded = 0;
 
     public GenericSearch(Problem problem, Strategy strategy) {
         this.problem = problem;
         this.strategy = strategy;
-        this.visitedStates = new HashSet<>();
+        this.visitedStates = new HashMap<>();
     }
 
     public int getNodesExpanded() {
@@ -29,7 +29,6 @@ public abstract class GenericSearch {
         if (strategy instanceof IDS){
             do {
                 Node node = nodes.poll();
-                visitedStates.add(node.getBottles());
                 if (problem.goalTest(node)) {
                     return node;
                 }
@@ -38,11 +37,12 @@ public abstract class GenericSearch {
                     ((IDS) strategy).incrementDepthLimit();
                     nodes.add(problem.getInitialState());
                     this.visitedStates.clear();
-                    this.visitedStates.add(problem.getInitialState().getBottles());
+                    this.visitedStates.put(problem.getInitialState().getBottles(), 0);
                 }
             } while(true);
         }
         else {
+            visitedStates.put(problem.getInitialState().getBottles(),0);
             while (!nodes.isEmpty()) {
                 Node node = nodes.poll();
                 if (problem.goalTest(node)) {
@@ -53,28 +53,26 @@ public abstract class GenericSearch {
         }
         return null;
     }
-    public static void monitorUsage() {
+    public static String[] monitorUsage() {
         OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         Runtime runtime = Runtime.getRuntime();
-
-        // CPU utilization (available only on some platforms)
+        double cpuUtilization;
+        String utilization;
         if (osBean instanceof com.sun.management.OperatingSystemMXBean) {
-            double cpuUtilization = ((com.sun.management.OperatingSystemMXBean) osBean).getProcessCpuLoad() * 100;
-            System.out.println("CPU Utilization: " + String.format("%.2f", cpuUtilization) + " %");
+             cpuUtilization=((com.sun.management.OperatingSystemMXBean) osBean).getProcessCpuLoad() * 100;
+             utilization="CPU Utilization: " + String.format("%.2f", cpuUtilization) + "%";
         } else {
-            System.out.println("CPU Utilization data not available on this platform.");
+            utilization = "CPU Utilization data not available on this platform.";
         }
 
         // RAM usage
-        long usedMemory = runtime.totalMemory() - runtime.freeMemory();
-        long freeMemory = runtime.freeMemory();
-        long totalMemory = runtime.totalMemory();
-        long maxMemory = runtime.maxMemory();
+        String usedMemory = "Used RAM: " + (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024);
+        String freeMemory = "Free RAM: " + runtime.freeMemory() / (1024 * 1024);
+        String totalMemory = "Total RAM: " + runtime.totalMemory() / (1024 * 1024);
+        String maxMemory = "Max RAM: " + runtime.maxMemory() / (1024 * 1024);
 
-        System.out.println("Used RAM: " + (usedMemory / (1024 * 1024)) + " MB");
-        System.out.println("Free RAM: " + (freeMemory / (1024 * 1024)) + " MB");
-        System.out.println("Total RAM: " + (totalMemory / (1024 * 1024)) + " MB");
-        System.out.println("Max RAM: " + (maxMemory / (1024 * 1024)) + " MB");
+        return new String[]{utilization, usedMemory, freeMemory, totalMemory, maxMemory};
+
     }
     public abstract List<Node> expand(Node node);
 }
