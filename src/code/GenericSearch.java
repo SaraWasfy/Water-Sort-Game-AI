@@ -27,14 +27,22 @@ public abstract class GenericSearch {
         Queue<Node> nodes = new LinkedList<>();
         nodes.add(problem.getInitialState());
         if (strategy instanceof IDS){
+            int maxDepth =-1;
+            boolean flag = false;
             do {
                 Node node = nodes.poll();
+                if (node.getDepth()> maxDepth) {
+                    maxDepth= node.getDepth();
+                    flag = true;
+                }
                 if (problem.goalTest(node)) {
                     return node;
                 }
                 nodes = strategy.qingFunction(nodes, expand(node));
                 this.setNodesExpanded(getNodesExpanded()+1);
                 if (nodes.isEmpty()){
+                    if (!flag) return null;
+                    flag = false;
                     ((IDS) strategy).incrementDepthLimit();
                     nodes.add(problem.getInitialState());
                     this.visitedStates.clear();
