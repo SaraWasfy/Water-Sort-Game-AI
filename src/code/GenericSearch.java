@@ -33,6 +33,7 @@ public abstract class GenericSearch {
                     return node;
                 }
                 nodes = strategy.qingFunction(nodes, expand(node));
+                this.setNodesExpanded(getNodesExpanded()+1);
                 if (nodes.isEmpty()){
                     ((IDS) strategy).incrementDepthLimit();
                     nodes.add(problem.getInitialState());
@@ -49,6 +50,7 @@ public abstract class GenericSearch {
                     return node;
                 }
                 nodes = strategy.qingFunction(nodes, expand(node));
+                this.setNodesExpanded(getNodesExpanded()+1);
             }
         }
         return null;

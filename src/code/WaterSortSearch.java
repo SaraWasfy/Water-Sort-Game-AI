@@ -90,7 +90,6 @@ public class WaterSortSearch extends GenericSearch {
                         if (!this.visitedStates.containsKey(newBottles) ||
                                 (this.visitedStates.containsKey(newBottles) && visitedStates.get(newBottles) >  node.getTotalPathCost()+ (int) result.get(3)) ){
                             Node newNode = new Node("pour_" + i + "_" + j, (int) result.get(3), node, node.getDepth() + 1, newBottles);
-                            this.setNodesExpanded(getNodesExpanded()+1);
                             successors.add(newNode);
                             visitedStates.put(newBottles, newNode.getTotalPathCost());
                         }
